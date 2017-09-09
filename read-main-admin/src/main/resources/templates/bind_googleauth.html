@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>绑定google认证</title>
+</head>
+<body>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        google认证
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div class="row">
+            <img src="data:image/jpeg;base64,${imgBase64}" width="200" height="200" class="img-thumbnail">
+        </div>
+        <div class="row">
+            <form method="post" class="form-horizontal" action="/bind_googleauth" style="width: 500px">
+                <input type="hidden" name="secretKey" value="${secretKey}">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">secret key：</label>
+                    <div class="col-sm-9  control-label" style="text-align: left">${secretKey}</div>
+                </div>
+                <div class="form-group">
+                    <label for="googlePwd" class="col-sm-3 control-label">google验证码：</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="googlePwd" name="googlePwd">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-10">
+                        <button type="submit" class="btn btn-blood">绑定</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

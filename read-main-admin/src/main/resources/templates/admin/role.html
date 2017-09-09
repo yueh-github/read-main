@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>角色列表</title>
+    <link href="/static/vendor/ztree/css/metroStyle/metroStyle.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            角色列表
+            <button class="btn btn-success" type="button"
+                    title="编辑权限" onclick="addRole()">
+                <i class="fa fa-plus"></i>添加角色
+            </button>
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <table style="width: 80%;" class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 30%;">角色名称</th>
+                            <th style="width: 50%;">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <#if roles?exists>
+                            <#list roles as role>
+                                <tr>
+                                    <td>${role.name}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-success" type="button"
+                                                title="编辑权限" onclick="loadResourceTree('${role.id}');">
+                                            <i class="fa fa-edit"></i>编辑权限
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" type="button"
+                                                title="删除角色" onclick="deleteRole('${role.id}')">
+                                            <i class="fa fa-minus"></i>删除角色
+                                        </button>
+                                    </td>
+                                </tr>
+                            </#list>
+                        </#if>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            权限列表
+                            <button class="btn btn-success" type="button" id="modifyRoleResource"
+                                    title="编辑权限" onclick="saveRoleResource();" disabled="disabled">
+                                <i class="fa fa-plus"></i>保存权限
+                            </button>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="row" id="grantInfo">
+                                <ul id="resourceTree" class="ztree"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">添加子级资源</h4>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" name="addRoleForm">
+                    <div class="row form-group">
+                        <label for="name" class="col-sm-3 control-label">角色名称:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="name" name="name" value="">
+                            <input type="hidden" id="pid" name="pid" value=""/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="saveRole()" data-loading-text='正在保存'>保存
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- /add modal-->
+<script type="text/javascript">
+    var loadZTreeJs = false;
+    var modifyRoleId;
+
+    var setting = {
+        check: {
+            enable: true
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        }
+    };
+    var zNodes = [];
+
+    var zTree;
+    function loadResourceTree(roleId) {
+        modifyRoleId = roleId;
+        $.get("/admin/role/resource?roleId=" + roleId, function (response) {
+            if (response.success) {
+                zNodes = [];
+                resolveTree(response.data);
+                console.log(zNodes);
+                if (!loadZTreeJs) {
+                    $('<script src="/static/vendor/ztree/js/jquery.ztree.all.js" />').appendTo("body");
+                    loadZTreeJs = true;
+                }
+                zTree = $.fn.zTree.init($("#resourceTree"), setting, zNodes);
+                $("#modifyRoleResource").prop("disabled", false);
+            }
+        });
+    }
+
+    function resolveTree(resourceTreeList) {
+        for (var i in resourceTreeList) {
+            var node = {};
+            var treeNode = resourceTreeList[i];
+            node.id = treeNode.resourceEntity.id;
+            node.pId = treeNode.resourceEntity.pid;
+            node.name = treeNode.resourceEntity.resourceName;
+            node.checked = treeNode.checked;
+            node.open = true;
+            zNodes.push(node);
+            if (treeNode.sonResourceTree && treeNode.sonResourceTree.length > 0) {
+                resolveTree(treeNode.sonResourceTree);
+            }
+        }
+    }
+
+    function saveRoleResource() {
+        var checkedIds = [];
+        var nodes = zTree.getCheckedNodes(true);
+        for (var i in nodes) {
+            checkedIds.push(nodes[i].id);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/role/resource/save",
+            data: {"roleId": modifyRoleId, "resourceIds": checkedIds.join(",")},
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    showTip("保存成功, 页面即将刷新", "success", function () {
+                        window.location.reload();
+                    });
+
+                } else {
+                    showTip("保存失败:Error:" + response.msg, "danger");
+                }
+            },
+            error: function () {
+                showTip("保存失败", "danger");
+            }
+        });
+    }
+
+    function deleteRole(roleId) {
+        if (confirm("是否确认删除该角色?")) {
+            $.ajax({
+                type: "POST",
+                url: "/admin/role/delete",
+                data: {"id": roleId},
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.success) {
+                        showTip("删除成功, 页面即将刷新", "success", function () {
+                            window.location.reload();
+                        });
+
+                    } else {
+                        showTip("删除失败:Error:" + response.msg, "danger");
+                    }
+                },
+
+                error: function () {
+                    showTip("删除失败", "danger");
+                }
+            });
+        }
+    }
+
+    function addRole() {
+        $("#addRoleModal").modal();
+    }
+
+    function saveRole() {
+        var form = $("form[name=addRoleForm]");
+        var roleObj = {};
+        roleObj.name = form.find("input[name=name]").val();
+        $.ajax({
+            type: "POST",
+            url: "/admin/role/add",
+            contentType: 'application/json; charset=UTF-8',
+            data: JSON.stringify(roleObj),
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    showTip("保存成功, 页面即将刷新", "success", function () {
+                        window.location.reload();
+                    });
+
+                } else {
+                    showTip("保存失败:Error:" + response.msg, "danger");
+                }
+            },
+            error: function () {
+                showTip("保存失败", "danger");
+            }
+        });
+    }
+</script>
+</body>
+</html>

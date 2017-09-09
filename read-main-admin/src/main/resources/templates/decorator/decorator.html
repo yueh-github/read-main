@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>
+        ${title}
+    </title>
+
+    ${head}
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="/static/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/static/dist/css/sb-admin-2.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="/static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<#macro showSonMenu sonMenus>
+    <#if sonMenus?? && sonMenus?size gt 0>
+        <ul class="nav nav-second-level">
+            <#list sonMenus as sonMenu>
+                <li>
+                    <a href="${sonMenu.resourceEntity.resource?default('#')}">
+                        ${sonMenu.resourceEntity.resourceName}
+                        <#if sonMenu.sonMenuList?? &&sonMenu.sonMenuList?size gt 0>
+                            <span class="fa arrow"></span>
+                        </#if>
+                    </a>
+                    <#if sonMenu.sonMenuList?? &&sonMenu.sonMenuList?size gt 0>
+                        <@showSonMenu sonMenus=sonMenu.sonMenuList />
+                    </#if>
+                </li>
+            </#list>
+        </ul>
+    </#if>
+</#macro>
+
+<body>
+<div id="wrapper">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">3f-Sports Admin</a>
+        </div>
+        <!-- /.navbar-header -->
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul id="rootMenuTab" class="nav navbar-nav nav-tabs" role="tablist">
+                <#if Session.rootMenus?exists>
+                    <#list Session.rootMenus as rootMenu>
+                        <#assign rootMenuId="root_${rootMenu.id}" />
+                        <li role="presentation"
+                            class="<#if rootMenuId == Session.currentRoot>active</#if>">
+                            <a href="#root_${rootMenu.id}" id="${rootMenu.id}" class="activeMenu" role="tab"
+                               data-toggle="tab">${rootMenu.resourceName}</a>
+                        </li>
+                    </#list>
+                </#if>
+            </ul>
+
+            <ul class="nav navbar-top-links navbar-right">
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#" class="disabled"><i class="fa fa-gear fa-fw"></i> 设置</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> 登出</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+        </div>
+
+        <div class="navbar-default sidebar tab-content" role="navigation">
+            <#if Session.leftMenuMap?exists>
+                <#assign leftMenuMap=Session.leftMenuMap />
+                <#list leftMenuMap?keys as rootMenuId>
+                    <div class="sidebar-nav navbar-collapse tab-pane <#if rootMenuId == Session.currentRoot>active</#if>"
+                         id="${rootMenuId}" role="tabpanel">
+                        <ul class="nav side-menu">
+                            <#list leftMenuMap[rootMenuId] as leftMenu>
+                                <li>
+                                    <a href="${leftMenu.resourceEntity.resource?default('#')}">
+                                        ${leftMenu.resourceEntity.resourceName}
+                                        <#if leftMenu.sonMenuList?? && leftMenu.sonMenuList?size gt 0>
+                                            <span class="fa arrow"></span>
+                                        </#if>
+                                    </a>
+
+                                    <#if leftMenu.sonMenuList?? && leftMenu.sonMenuList?size gt 0>
+                                        <@showSonMenu sonMenus=leftMenu.sonMenuList />
+                                    </#if>
+                                </li>
+                            </#list>
+                        </ul>
+                    </div>
+                    <!-- /.sidebar-collapse -->
+                </#list>
+            </#if>
+        </div>
+        <!-- /.navbar-static-side -->
+    </nav>
+
+    <div id="page-wrapper">
+        ${body}
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<div class="sys-tip alert alert-info"
+     style="display: none;z-index: 999;position: fixed;bottom: 20%;right: 0;margin-bottom: 0; padding: 1em 1.3em;font-size: 1.2em;">
+    <span>Default alert</span>
+</div>
+<!-- /#wrapper -->
+
+<!-- jQuery -->
+<script src="/static/vendor/jquery/jquery.min.js"></script>
+<script src="/static/vendor/jquery.cookie/jquery.cookie.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/vendor/bootbox.js/bootbox.js"></script>
+<!-- Metis Menu Plugin JavaScript -->
+<script src="/static/vendor/metisMenu/metisMenu.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/static/dist/js/sb-admin-2.js"></script>
+<script src="/static/dist/js/laypage.js"></script>
+
+<!-- Page-Level Demo Scripts - Notifications - Use for reference -->
+<script>
+    // tooltip demo
+    $('.tooltip-demo').tooltip({
+        selector: "[data-toggle=tooltip]",
+        container: "body"
+    });
+    // popover demo
+    $("[data-toggle=popover]").popover();
+
+    var menuId = $.cookie('activeMenu');
+    $('#' + menuId).parent().parent().find('.active').removeClass('active');
+    $('#' + menuId).parent().addClass('active');
+    $('#root_' + menuId).parent().find('.active').removeClass('active');
+    $('#root_' + menuId).addClass('active');
+    $('.activeMenu').on('click', function () {
+//        $(this).parent().parent().find('.active').removeClass('active');
+//        $(this).parent().addClass('active');
+        $.cookie('activeMenu', $(this).attr('id'), {path: '/'});
+    });
+
+    function showTip(tip, type, outFunc) {
+        var title, msg;
+        if (!tip.title) {
+            title = (type == "success" ? "成功提示" : (type == "danger" ? "错误提示" : "提示"));
+            msg = tip;
+        } else {
+            title = tip.title;
+            msg = tip.msg;
+        }
+//        var _tip = $("<div class='panel' style='float: right; margin-right: 20px; width: 300px; margin-top: -50px;z-index: 999;'></div>");
+//        var _tip = $("<div class='panel' style='z-index: 999;position: fixed;bottom: 20%;right: 0;margin-bottom: 0; padding: 1em 1.3em;font-size: 1.2em;'></div>");
+//        $("<div class='panel-heading'><h3 class='panel-title'>" + title + "</h3></div>").appendTo(_tip);
+//        $("<div class='panel-body'>" + msg + "</div>").appendTo(_tip);
+//        _tip.addClass("panel-" + type);
+
+//        _tip.hide().appendTo('body').fadeIn(300).delay(2400).fadeOut(300, function () {
+//            _tip.remove();
+//            if (outFunc) {
+//                outFunc();
+//            }
+//        });
+        var _tip = $(".sys-tip");
+        _tip.removeClass();
+        _tip.addClass("sys-tip");
+        _tip.addClass("alert");
+        _tip.addClass("alert-" + type);
+        _tip.find("span").html(msg);
+        _tip.delay(200).fadeIn().delay(4000).fadeOut(300, function () {
+            if (outFunc) {
+                outFunc();
+            }
+        });
+    }
+
+    if ($.isFunction(window.autoRun)) {
+        autoRun();
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>成功页面</title>
+</head>
+<body>
+
+<div class="row">
+    <div class="panel panel-default">
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="/static/img/failed"/>
+                </div>
+                <div class="col-md-6">${message}</div>
+            </div>
+            <div class="row">
+                <#if jumpUrl?exists>
+                    请求成功，页面即将<a href="${jumpUrl}">跳转</a>
+                </#if>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var jumpUrl = "${jumpUrl}";
+        setTimeout(function () {
+            window.location.href = jumpUrl;
+        }, 3000);
+    });
+</script>
+</body>
+</html>

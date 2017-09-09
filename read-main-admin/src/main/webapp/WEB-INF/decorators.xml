@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators>
+    <decorator name="default" page="/decorator/decorator.html">
+        <pattern>/*</pattern>
+    </decorator>
+
+    <excludes>
+        <pattern>/login</pattern>
+        <pattern>/logout</pattern>
+        <pattern>/index.html</pattern>
+    </excludes>
+</decorators>

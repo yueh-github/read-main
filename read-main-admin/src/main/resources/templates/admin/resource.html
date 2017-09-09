@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>资源列表</title>
+</head>
+
+<#macro showResourceTree resourceNodes nodeLevel>
+    <#if resourceNodes?? && resourceNodes?size gt 0>
+        <#list resourceNodes as resourceNode>
+            <tr data-id="${resourceNode.resourceEntity.id}"
+                data-pid="${resourceNode.resourceEntity.pid}">
+                <td>
+                    <#list 1..nodeLevel as level>&nbsp;&nbsp;</#list>
+                    ${resourceNode.resourceEntity.resourceName}
+                </td>
+                <td>${resourceNode.resourceEntity.resource}</td>
+                <td>${resourceNode.resourceEntity.sort}</td>
+                <td data-type="${resourceNode.resourceEntity.resourceType}">
+                    <@showResourceType resourceType=resourceNode.resourceEntity.resourceType/>
+                </td>
+                <td data-public="${resourceNode.resourceEntity.isPublic}">
+                    <@showIsPublic isPublic=resourceNode.resourceEntity.isPublic/>
+                </td>
+                <td>
+                    <button class="btn btn-success btn-circle add-resource" type="button"
+                            title="添加子级资源" onclick="addResource(this);">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                    <button class="btn btn-success btn-circle edit-resource" type="button"
+                            title="修改" onclick="editResource(this);">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-circle delete-resource" type="button"
+                            title="删除" onclick="deleteResource(this);">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </td>
+            </tr>
+            <#if resourceNode.sonResourceTree?? && resourceNode.sonResourceTree?size gt 0>
+                <@showResourceTree resourceNodes=resourceNode.sonResourceTree nodeLevel=nodeLevel+4/>
+            </#if>
+        </#list>
+    </#if>
+</#macro>
+
+<#macro showResourceType resourceType>
+    <#if resourceType==1>菜单</#if>
+    <#if resourceType==2>链接</#if>
+</#macro>
+
+<#macro showIsPublic isPublic>
+    <#if isPublic==0>否</#if>
+    <#if isPublic==1>是</#if>
+</#macro>
+
+<body>
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            权限资源列表
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table width="100%" class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th style="width: 20%;">资源名称</th>
+                        <th style="width: 25%;">权限规则</th>
+                        <th style="width: 10%">排序</th>
+                        <th style="width: 10%">资源类型</th>
+                        <th style="width: 10%">是否公共权限</th>
+                        <th style="width: 25%;">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <#if resources?exists>
+                        <#list resources as resourceNode>
+                            <tr data-id="${resourceNode.resourceEntity.id}"
+                                data-pid="${resourceNode.resourceEntity.pid}">
+                                <td>${resourceNode.resourceEntity.resourceName}</td>
+                                <td>${resourceNode.resourceEntity.resource}</td>
+                                <td>${resourceNode.resourceEntity.sort}</td>
+                                <td data-type="${resourceNode.resourceEntity.resourceType}">
+                                    <@showResourceType resourceType=resourceNode.resourceEntity.resourceType/>
+                                </td>
+                                <td data-public="${resourceNode.resourceEntity.isPublic}">
+                                    <@showIsPublic isPublic=resourceNode.resourceEntity.isPublic/>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-info btn-circle add-resource" type="button"
+                                            title="添加子级资源" onclick="addResource(this);">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-info btn-circle edit-resource" type="button"
+                                            title="修改" onclick="editResource(this);">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger btn-circle delete-resource" type="button"
+                                            title="删除" onclick="deleteResource(this);">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <#if resourceNode.sonResourceTree?? && resourceNode.sonResourceTree?size gt 0>
+                                <@showResourceTree resourceNodes=resourceNode.sonResourceTree nodeLevel=4/>
+                            </#if>
+                        </#list>
+                    </#if>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="modal fade" id="addResourceModal" tabindex="-1" role="dialog" aria-labelledby="addResourceModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">添加子级资源</h4>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" name="addResourceForm">
+                    <div class="row form-group">
+                        <label for="pResourceName" class="col-sm-3 control-label">父级资源名称:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="pResourceName" name="pResourceName" value="">
+                            <input type="hidden" id="pid" name="pid" value=""/>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="resourceName" class="col-sm-3 control-label">资源名称:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="resourceName" name="resourceName"
+                                   placeholder="请输入资源名称">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="resource" class="col-sm-3 control-label">权限规则:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="resource" name="resource" placeholder="请输入权限规则">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="sort" class="col-sm-3 control-label">排序:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="sort" name="sort" placeholder="请输入排序">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="resourceType" class="col-sm-3 control-label">资源类型:</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="resourceType" name="resourceType">
+                                <option value="1">菜单</option>
+                                <option value="2">链接</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="isPublic" class="col-sm-3 control-label">是否公共权限:</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="isPublic" name="isPublic">
+                                <option value="0">否</option>
+                                <option value="1">是</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="saveResource()" data-loading-text='正在保存'>保存
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- /add modal-->
+<script type="text/javascript">
+
+    function addResource(obj) {
+        var form = $("form[name=addResourceForm]");
+        var _this = $(obj);
+        var parentTr = _this.parents("tr");
+        var pid = parentTr.data("id");
+        var pResourceName = $.trim($.trim($(parentTr.children("td")[0]).html()).replace(/&nbsp;/g, ""));
+
+        $(form).find("input").val("");
+        $(form).find("input[name=pid]").val(pid);
+        $(form).find("input[name=pResourceName]").val(pResourceName);
+        $(form).find("input[name=pResourceName]").prop("disabled", true);
+
+        $("#addResourceModal").modal();
+    }
+
+    function saveResource() {
+        var form = $("form[name=addResourceForm]");
+        var resourceObj = {};
+        resourceObj.pid = form.find("input[name=pid]").val();
+        resourceObj.resourceName = form.find("input[name=resourceName]").val();
+        resourceObj.resource = form.find("input[name=resource]").val();
+        resourceObj.sort = form.find("input[name=sort]").val();
+        resourceObj.resourceType = form.find("select[name=resourceType]").val();
+        resourceObj.isPublic = form.find("select[name=isPublic]").val();
+        $.ajax({
+            type: "POST",
+            url: "/admin/resource/add",
+            contentType: 'application/json; charset=UTF-8',
+            data: JSON.stringify(resourceObj),
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    showTip("保存成功, 页面即将刷新", "success", function () {
+                        window.location.reload();
+                    });
+
+                } else {
+                    showTip("保存失败:Error:" + response.msg, "danger");
+                }
+            },
+            error: function () {
+                showTip("保存失败", "danger");
+            }
+        });
+    }
+
+    function deleteResource(obj) {
+        if (confirm("是否确认删除该系统资源?")) {
+            var _this = $(obj);
+            var parentTr = _this.parents("tr");
+            var id = parentTr.data("id");
+            $.ajax({
+                type: "POST",
+                url: "/admin/resource/delete",
+                data: {"id": id},
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        showTip("删除成功, 页面即将刷新", "success", function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        showTip("删除失败:Error:" + response.msg, "danger");
+                    }
+                },
+                error: function () {
+                    showTip("删除失败", "danger");
+                }
+            });
+        }
+    }
+
+    function editResource(obj) {
+        var _this = $(obj);
+        if (_this.hasClass("disabled")) {
+            console.log("disabled");
+            return false;
+        }
+
+        var parentTr = _this.parents("tr");
+        var tds = parentTr.children("td");
+
+        var originHtml = parentTr.html();
+
+        var resourceName = $.trim($(tds[0]).html()).replace(/&nbsp;/g, "");
+        var resourceType = $(tds[3]).data("type");
+        var isPublic = $(tds[4]).data("public");
+
+        var idInput = $("<input type='hidden' class='form-control' id='id' value='" + parentTr.data("id") + "' />");
+        var pidInput = $("<input type='hidden' class='form-control' id='pid' value='" + parentTr.data("pid") + "' />");
+        var resourceNameInput = $("<input type='text' class='form-control' id='resourceName' value='" + $.trim(resourceName) + "' />");
+        var resourceInput = $("<input type='text' class='form-control' id='resource' value='" + $(tds[1]).html() + "' />");
+        var sortInput = $("<input type='text' class='form-control' id='sort' value='" + $(tds[2]).html() + "' />");
+        var resourceTypeSelect = resourceType == 1 ?
+            $("<select class='form-control' id='resourceType' ><option value='1' selected>菜单</option><option value='2'>链接</option></select>")
+            : $("<select class='form-control' id='resourceType' ><option value='1'>菜单</option><option value='2' selected>链接</option></select>");
+        var isPublicSelect = isPublic == 0 ?
+            $("<select class='form-control' id='isPublic'><option value='0' selected>否</option><option value='1'>是</option></select>")
+            :
+            $("<select class='form-control' id='isPublic'><option value='0'>否</option><option value='1' selected>是</option></select>");
+        var confirmBtn = $("<button type='button' class='btn btn-danger' data-loading-text='正在保存'>保存</button>");
+        var cancelBtn = $("<button type='button' class='btn btn-danger'>取消</button>");
+
+        tds.html("");
+        idInput.appendTo($(tds[0]));
+        pidInput.appendTo($(tds[0]));
+        resourceNameInput.appendTo($(tds[0]));
+        resourceInput.appendTo($(tds[1]));
+        sortInput.appendTo($(tds[2]));
+        resourceTypeSelect.appendTo($(tds[3]));
+        isPublicSelect.appendTo($(tds[4]));
+        confirmBtn.appendTo($(tds[5]));
+        cancelBtn.appendTo($(tds[5]));
+
+        $(".add-resource").addClass("disabled");
+        $(".edit-resource").addClass("disabled");
+        $(".delete-resource").addClass("disabled");
+
+        confirmBtn.click(function () {
+            var resourceObj = {};
+            resourceObj.id = idInput.val();
+            resourceObj.pid = pidInput.val();
+            resourceObj.resourceName = resourceNameInput.val();
+            resourceObj.resource = resourceInput.val();
+            resourceObj.sort = sortInput.val();
+            resourceObj.resourceType = resourceTypeSelect.val();
+            resourceObj.isPublic = isPublicSelect.val();
+            $.ajax({
+                type: "POST",
+                url: "/admin/resource/edit",
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(resourceObj),
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        showTip("保存成功, 页面即将刷新", "success", function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        showTip("保存失败:Error:" + response.msg, "danger");
+                    }
+                },
+                error: function () {
+                    showTip("保存失败", "danger");
+                    cancelBtn.click();
+                }
+            });
+        });
+
+        cancelBtn.click(function () {
+            parentTr.html(originHtml);
+
+            $(".add-resource").removeClass("disabled");
+            $(".edit-resource").removeClass("disabled");
+            $(".delete-resource").removeClass("disabled");
+        });
+    }
+</script>
+</body>
+</html>
