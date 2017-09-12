@@ -41,8 +41,8 @@
 //        UserEntity userEntity = new UserEntity("岳浩", 1000);
 ////
 //        DemoEntity demoEntity = new DemoEntity();
-//        demoEntity.setMsg("mes:给我一杯水");
-//        demoEntity.setContent("content:水来了~");
+////        demoEntity.setMsg("mes:给我一杯水");
+////        demoEntity.setContent("content:水来了~");
 //        return new Gson().toJson(demoEntity);
 ////        return "岳浩";
 //    }
@@ -79,6 +79,6 @@
 ////        ValueOperations<String, UserEntity> operations = redisTemplate.opsForValue();
 ////        UserEntity userEntity = new UserEntity("岳飞", 1000);
 ////        operations.set("yuehao", userEntity);
-//        return new Gson().toJson(operations.get("yuehao").getName());
-//    }
+////        return new Gson().toJson(operations.get("yuehao").getName());
+////    }
 //}

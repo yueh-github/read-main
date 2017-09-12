@@ -16,6 +16,7 @@ public class TestServiceImpl implements TestService{
 
     @Resource
     private TestUserDao testUserDao;
+
     public List<TestUser> getUserList() throws Exception {
         return this.testUserDao.getTestList();
     }

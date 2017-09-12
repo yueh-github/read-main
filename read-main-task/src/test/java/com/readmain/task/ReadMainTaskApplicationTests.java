@@ -1,4 +1,4 @@
-package com.readmain.task.readmaintask;
+package com.readmain.task;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

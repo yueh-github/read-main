@@ -14,4 +14,6 @@ import org.springframework.context.annotation.Configuration;
 @MapperScan(basePackages = "com.readmain.service.dao", annotationClass = Mapper.class)
 public class ServiceAutoConfiguration {
 
+
+
 }
