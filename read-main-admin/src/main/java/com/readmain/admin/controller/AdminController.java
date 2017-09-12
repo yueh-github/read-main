@@ -51,7 +51,7 @@ public class AdminController {
         } catch (CustomerException e) {
             throw ApiException.build(e);
         } catch (Exception e) {
-            log.error("保存role异常:{}", e);
+//            log.error("保存role异常:{}", e);
             throw e;
         }
     }
@@ -67,7 +67,7 @@ public class AdminController {
         } catch (CustomerException e) {
             throw ApiException.build(e);
         } catch (Exception e) {
-            log.error("保存role异常:{}", e);
+//            log.error("保存role异常:{}", e);
             throw e;
         }
     }
@@ -82,7 +82,7 @@ public class AdminController {
         } catch (CustomerException e) {
             throw ApiException.build(e);
         } catch (Exception e) {
-            log.error("保存role异常:{}", e);
+//            log.error("保存role异常:{}", e);
             throw e;
         }
     }
@@ -99,7 +99,7 @@ public class AdminController {
         } catch (CustomerException e) {
             throw ApiException.build(e);
         } catch (Exception e) {
-            log.error("保存role异常:{}", e);
+//            log.error("保存role异常:{}", e);
             throw e;
         }
     }
@@ -113,7 +113,7 @@ public class AdminController {
         } catch (CustomerException e) {
             throw ApiException.build(e);
         } catch (Exception e) {
-            log.error("保存role异常:{}", e);
+//            log.error("保存role异常:{}", e);
             throw e;
         }
     }
@@ -140,7 +140,7 @@ public class AdminController {
         } catch (CustomerException e) {
             throw ApiException.build(e);
         } catch (Exception e) {
-            log.error("保存role异常:{}", e);
+//            log.error("保存role异常:{}", e);
             throw e;
         }
     }
@@ -154,7 +154,7 @@ public class AdminController {
         } catch (CustomerException e) {
             throw ApiException.build(e);
         } catch (Exception e) {
-            log.error("保存role异常:{}", e);
+//            log.error("保存role异常:{}", e);
             throw e;
         }
     }
@@ -171,7 +171,7 @@ public class AdminController {
         } catch (CustomerException e) {
             throw ApiException.build(e);
         } catch (Exception e) {
-            log.error("保存role异常:{}", e);
+//            log.error("保存role异常:{}", e);
             throw e;
         }
     }
@@ -185,7 +185,7 @@ public class AdminController {
         } catch (CustomerException e) {
             throw ApiException.build(e);
         } catch (Exception e) {
-            log.error("保存role异常:{}", e);
+//            log.error("保存role异常:{}", e);
             throw e;
         }
     }
@@ -207,7 +207,7 @@ public class AdminController {
         } catch (CustomerException e) {
             throw ApiException.build(e);
         } catch (Exception e) {
-            log.error("保存resource异常:{}", e);
+//            log.error("保存resource异常:{}", e);
             throw e;
         }
     }
@@ -221,7 +221,7 @@ public class AdminController {
         } catch (CustomerException e) {
             throw ApiException.build(e);
         } catch (Exception e) {
-            log.error("保存resource异常:{}", e);
+//            log.error("保存resource异常:{}", e);
             throw e;
         }
     }
@@ -235,7 +235,7 @@ public class AdminController {
         } catch (CustomerException e) {
             throw ApiException.build(e);
         } catch (Exception e) {
-            log.error("保存resource异常:{}", e);
+//            log.error("保存resource异常:{}", e);
             throw e;
         }
     }

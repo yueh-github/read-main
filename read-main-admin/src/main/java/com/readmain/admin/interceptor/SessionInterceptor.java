@@ -25,7 +25,7 @@ public class SessionInterceptor implements HandlerInterceptor {
     @SuppressWarnings({"unchecked"})
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         String requestUrl = request.getRequestURI();
-        log.info("requestUrl:{}", requestUrl);
+//        log.info("requestUrl:{}", requestUrl);
         if (ArrayUtils.contains(NO_NEED_VALID_URLS, requestUrl)) {
             return true;
         }
@@ -47,7 +47,7 @@ public class SessionInterceptor implements HandlerInterceptor {
         }
 
         List<String> grantedUrl = (List<String>) session.getAttribute(Constants.SESSION_GRANTED_URL_KEY);
-        log.info("grantedUrl -->>" + JSON.toJSONString(grantedUrl));
+//        log.info("grantedUrl -->>" + JSON.toJSONString(grantedUrl));
         if (grantedUrl.contains(requestUrl)) {
             return true;
         } else {

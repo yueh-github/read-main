@@ -63,8 +63,8 @@ public class LoginController implements InitializingBean {
 
     @RequestMapping(value = "login", method = {RequestMethod.GET})
     public String gotoLogin(HttpServletRequest servletRequest) {
-        log.info("idDev:{}", isDev);
-        log.info("sitemesh:{}", servletRequest.getServletContext().getInitParameter("sitemesh.configfile"));
+//        log.info("idDev:{}", isDev);
+//        log.info("sitemesh:{}", servletRequest.getServletContext().getInitParameter("sitemesh.configfile"));
         HttpSession session = SessionAware.getSession();
         if (session != null && session.getAttribute("userInfo") != null) {
             return "redirect:/index";
@@ -101,7 +101,7 @@ public class LoginController implements InitializingBean {
                 leftMenuMap.put("root_" + rootResource.getId(), leftMenus);
             }
             for (String s : leftMenuMap.keySet()) {
-                log.info("{}:{}", s, JSON.toJSONString(leftMenuMap.get(s)));
+//                log.info("{}:{}", s, JSON.toJSONString(leftMenuMap.get(s)));
             }
             session.setAttribute("leftMenuMap", leftMenuMap);
             if (CollectionUtils.isNotEmpty(rootResources)) {
@@ -170,6 +170,6 @@ public class LoginController implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        log.info("类已经被初始化, isDev的参数值:{}, domainUrl:{}", isDev, domainUrl);
+//        log.info("类已经被初始化, isDev的参数值:{}, domainUrl:{}", isDev, domainUrl);
     }
 }
