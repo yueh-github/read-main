@@ -7,6 +7,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Configuration;
 
+//tomcat启动必须配置
 @Configuration
 public class ServletInitializer extends SpringBootServletInitializer {
 

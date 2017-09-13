@@ -12,12 +12,17 @@ import java.util.List;
  * Created by yuehao on 2017/8/29.
  */
 @Service
-public class TestServiceImpl implements TestService{
+public class TestServiceImpl implements TestService {
 
     @Resource
     private TestUserDao testUserDao;
 
     public List<TestUser> getUserList() throws Exception {
         return this.testUserDao.getTestList();
+    }
+
+    @Override
+    public void insertTestUser(TestUser testUser) {
+        this.testUserDao.insertSelective(testUser);
     }
 }

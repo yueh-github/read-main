@@ -10,4 +10,6 @@ import java.util.List;
 public interface TestService {
 
     List<TestUser> getUserList()throws Exception;
+
+    void insertTestUser(TestUser testUser);
 }
