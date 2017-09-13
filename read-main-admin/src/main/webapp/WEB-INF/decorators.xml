@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <decorators>
-    <decorator name="default" page="/decorator/decorator.html">
+    <decorator name="default" page="/templates/decorator.html">
         <pattern>/*</pattern>
     </decorator>
 

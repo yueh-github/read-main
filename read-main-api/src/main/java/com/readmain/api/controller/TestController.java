@@ -31,7 +31,7 @@ public class TestController {
     public String getListData() throws Exception {
 
         List<TestUser> testUserList = this.testService.getUserList();
-        log.info("获取到的json数据{}", new Gson().toJson(testUserList));
+//        log.info("获取到的json数据{}", new Gson().toJson(testUserList));
         return new Gson().toJson(testUserList);
     }
 }
