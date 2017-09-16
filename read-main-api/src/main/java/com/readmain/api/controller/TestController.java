@@ -1,7 +1,8 @@
 package com.readmain.api.controller;
 
 import com.google.gson.Gson;
-import com.readmain.api.exception.ReadmainException;
+import com.readmain.api.exception.EReadException;
+import com.readmain.api.exception.ReadException;
 import com.readmain.common.entity.TestUser;
 import com.readmain.service.service.TestService;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +47,11 @@ public class TestController {
 
     @RequestMapping("/read_exception")
     public void testReadExcption() throws Exception {
-        throw new ReadmainException("网络错误", 100002);
+        throw new ReadException("网络错误", 100002);
+    }
+
+    @RequestMapping("/test_read_exception")
+    public void testReadExceptionApi()throws Exception{
+        throw EReadException.SYS_WARN.buildReadException();
     }
 }

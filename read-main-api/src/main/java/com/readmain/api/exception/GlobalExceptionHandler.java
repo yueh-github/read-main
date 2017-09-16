@@ -27,8 +27,8 @@ public class GlobalExceptionHandler {
         return new Gson().toJson(JsonCallback.builder().code(99999).message("system").success("false").build());
     }
 
-    @ExceptionHandler(value = ReadmainException.class)
-    public Object getDefaultException(HttpServletRequest request,ReadmainException e){
+    @ExceptionHandler(value = ReadException.class)
+    public Object getDefaultException(HttpServletRequest request,ReadException e){
         return new Gson().toJson(JsonCallback.builder().code(e.getCode()).message(e.getMessage()).success("false").build());
     }
 
