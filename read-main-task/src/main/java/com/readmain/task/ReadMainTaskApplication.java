@@ -1,7 +1,5 @@
 package com.readmain.task;
 
-import com.readmain.task.thread.ProductThread;
-import com.readmain.task.thread.ReadThread;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,10 +17,10 @@ public class ReadMainTaskApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ReadMainTaskApplication.class, args);
-        new Thread(new ProductThread()).start();
+//        new Thread(new ProductThread()).start();
 
-        for (int i = 0; i < 5; i++) {
-            threadPoolExecutor.execute(new ReadThread());
-        }
+//        for (int i = 0; i < 5; i++) {
+//            threadPoolExecutor.execute(new ReadThread());
+//        }
     }
 }
