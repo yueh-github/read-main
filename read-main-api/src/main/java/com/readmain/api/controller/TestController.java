@@ -1,7 +1,7 @@
 package com.readmain.api.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
+import com.readmain.api.exception.ReadmainException;
 import com.readmain.common.entity.TestUser;
 import com.readmain.service.service.TestService;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -28,10 +30,22 @@ public class TestController {
     }
 
     @RequestMapping("/list")
-    public String getListData() throws Exception {
+    public String getListData(HttpServletRequest request) throws Exception {
 
         List<TestUser> testUserList = this.testService.getUserList();
+        HttpSession httpSession = request.getSession();
+        httpSession.setAttribute("name", "岳浩");
 //        log.info("获取到的json数据{}", new Gson().toJson(testUserList));
         return new Gson().toJson(testUserList);
+    }
+
+    @RequestMapping("/exception")
+    public void testException() throws Exception {
+        throw new Exception("网络异常");
+    }
+
+    @RequestMapping("/read_exception")
+    public void testReadExcption() throws Exception {
+        throw new ReadmainException("网络错误", 100002);
     }
 }

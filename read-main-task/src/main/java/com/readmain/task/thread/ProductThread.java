@@ -25,7 +25,7 @@ public class ProductThread implements Runnable {
             while (true) {
                 Thread.sleep(10);
                 blockingQueue.put(string);
-                log.info("生产者存入数据  ************************************* 队列长度" + blockingQueue.size());
+//                log.info("生产者存入数据  ************************************* 队列长度" + blockingQueue.size());
             }
         } catch (Exception ex) {
 

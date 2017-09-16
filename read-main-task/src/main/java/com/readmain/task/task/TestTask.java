@@ -43,7 +43,7 @@ public class TestTask {
     @Scheduled(cron = "*/5 * * * * ?")
     public void testTaskInit() throws Exception {
         String string = "{\"id\":1,\"name\":\"岳浩\",\"age\":29},{\"id\":2,\"name\":\"李爱云\",\"age\":28}";
-        log.info("放入队列数据 ---" + testInitializingBean.init(string));
+//        log.info("放入队列数据 ---" + testInitializingBean.init(string));
     }
 
 
@@ -52,6 +52,6 @@ public class TestTask {
         String string = "{\"id\":1,\"name\":\"岳浩\",\"age\":29},{\"id\":2,\"name\":\"李爱云\",\"age\":28}";
 //        List<TestUser> ListtestUserList = this.testService.getUserList();
         queue.put(string);
-        log.info("放入队列数据 ---" + queue.size());
+//        log.info("放入队列数据 ---" + queue.size());
     }
 }

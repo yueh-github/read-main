@@ -8,7 +8,7 @@
 // * Created by yuehao on 2017/9/4.
 // */
 //@WebFilter(urlPatterns = "/*", filterName = "testFilter")
-//public class TestFilter implements Filter {
+//public class TestFilter implements filter {
 //
 //    @Override
 //    public void init(FilterConfig filterConfig) throws ServletException {
